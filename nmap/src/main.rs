@@ -1,11 +1,17 @@
 extern crate pnet;
+extern crate nmap;
 
 use pnet::datalink::{self, interfaces, NetworkInterface};
 use pnet::datalink::Channel::Ethernet;
 
+use nmap::iana;
 use std::process;
 
+
 fn main() {
+    let udp_map = iana::get_udp_map();
+    let tcp_map = iana::get_tcp_map();
+
     let given_iface = match std::env::args().nth(1) {
         Some(n) => n,
         None => {
@@ -33,4 +39,18 @@ fn main() {
             process::exit(1);
         }
     };
+
+    let index = 4553;
+    let udp_result = match udp_map.get(&index) {
+        Some(res) => res,
+        None      => "unknown",
+    };
+
+    let tcp_result = match tcp_map.get(&index) {
+        Some(res) => res,
+        None      => "unknown",
+    };
+
+    println!("udp: {}", udp_result);
+    println!("tcp: {}", tcp_result);
 }
