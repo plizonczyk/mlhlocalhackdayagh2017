@@ -1,6 +1,6 @@
 extern crate nmap;
 
-use nmap::{iana, icmp};
+use nmap::{iana, icmp, scans};
 
 use std::net::IpAddr;
 use std::process;
@@ -19,20 +19,17 @@ fn main() {
 
     let dest_ip = ip_to_scan.parse::<IpAddr>().expect("Invalid IPv4 address");
 
-    let index = 4553;
-    let udp_result = match udp_map.get(&index) {
-        Some(res) => res,
-        None      => "unknown",
-    };
+    println!("Scanning host: {}", ip_to_scan);
+    let icmp_result = icmp::icmp_scan(&dest_ip);
 
-    let tcp_result = match tcp_map.get(&index) {
-        Some(res) => res,
-        None      => "unknown",
-    };
-
-    println!("udp: {}", udp_result);
-    println!("tcp: {}", tcp_result);
-
-    println!("Scanning {}", &ip_to_scan);
-    icmp::icmp_scan(&dest_ip);
+    if icmp_result {
+        let results = scans::tcp(&ip_to_scan, 0, 65535);
+        println!("Checking registered ports (IANA registry)");
+        for result in results {
+            match tcp_map.get(&(result as u64)) {
+                Some(desc) => println!("{}: {}", result, desc),
+                _          => continue,
+            }
+        }
+    }
 }
