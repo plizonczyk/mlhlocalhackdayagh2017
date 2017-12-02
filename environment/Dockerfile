@@ -1,8 +1,12 @@
-FROM python:3.6-jessie
+#FROM python:3.6-jessie
+FROM ubuntu:17.10
 
-COPY listeners.py listeners.py
+RUN apt update && apt upgrade && apt install -y python3
+# COPY listeners.py listeners.py
+COPY multiple_ports.sh multiple_ports.sh
 
 # TCP 50123
 # UDP 50321
-CMD ["python", "listeners.py"]
 
+# CMD ["./multiple_ports.sh"]
+CMD ["/bin/bash"]

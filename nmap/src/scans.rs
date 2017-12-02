@@ -37,8 +37,11 @@ pub fn tcp(host: &str, first: u16, last: u16) -> Vec<u32> {
         let addr = host.to_string() + ":" + &port_str;
         
         match net::TcpStream::connect(&addr) {
-            Ok(_) => result.push(port_num as u32),
-            Err(_)     => continue,
+            Ok(_)  => {
+                println!("Open port: {}", port_num);
+                result.push(port_num as u32);
+            }
+            Err(_) => continue,
             // Err(_) => {
             //     println!("No match {}", addr)
             // }

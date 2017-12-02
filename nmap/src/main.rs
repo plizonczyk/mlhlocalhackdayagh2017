@@ -5,6 +5,7 @@ use pnet::datalink::{self, interfaces, NetworkInterface};
 use pnet::datalink::Channel::Ethernet;
 
 use nmap::iana;
+use nmap::scans;
 use std::process;
 
 
@@ -40,17 +41,13 @@ fn main() {
         }
     };
 
-    let index = 4553;
-    let udp_result = match udp_map.get(&index) {
-        Some(res) => res,
-        None      => "unknown",
-    };
-
-    let tcp_result = match tcp_map.get(&index) {
-        Some(res) => res,
-        None      => "unknown",
-    };
-
-    println!("udp: {}", udp_result);
-    println!("tcp: {}", tcp_result);
+    println!("Scanning host: {}", ip_to_scan);
+    let results = scans::tcp(&ip_to_scan, 0, 65535);
+    println!("Checking registered ports (IANA registry)");
+    for result in results {
+        match tcp_map.get(&(result as u64)) {
+            Some(desc) => println!("{}: {}", result, desc),
+            _          => continue,
+        }
+    }
 }
