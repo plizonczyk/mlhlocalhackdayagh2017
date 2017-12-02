@@ -1,0 +1,6 @@
+[package]
+name = "nmap"
+version = "0.1.0"
+authors = ["Piotr Lizonczyk <plizonczyk.public@gmail.com>"]
+
+[dependencies]
