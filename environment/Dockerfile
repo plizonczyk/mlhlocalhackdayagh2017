@@ -1,4 +1,8 @@
 FROM python:3.6-jessie
 
-CMD ["python", "-m", "http.server", "50123"]
+COPY listeners.py listeners.py
+
+# TCP 50123
+# UDP 50321
+CMD ["python", "listeners.py"]
 
