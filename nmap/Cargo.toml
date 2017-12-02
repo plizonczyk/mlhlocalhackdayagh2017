@@ -6,3 +6,4 @@ authors = ["Piotr Lizonczyk <plizonczyk.public@gmail.com>"]
 [dependencies]
 libc = "0.2"
 pnet = "0.20.0"
+rand = "0.3"
